@@ -1,9 +1,11 @@
 package com.metinbudak.ecommerce.controller;
 
-import com.metinbudak.ecommerce.dto.ProductDto;
+import com.metinbudak.ecommerce.dto.ProductCreateUpdateDto;
+import com.metinbudak.ecommerce.dto.ProductReadDto;
 import com.metinbudak.ecommerce.repository.domain.Product;
 import com.metinbudak.ecommerce.service.ProductService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +19,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@Validated
 public class ProductController {
 
     private ProductService productService;
@@ -26,34 +29,34 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getAllProducts() {
-        List<Product> categories = productService.getAllProducts();
+    public ResponseEntity<List<ProductReadDto>> getAllProducts() {
+        List<ProductReadDto> categories = productService.getAllProducts();
         return ResponseEntity.ok(categories);
     }
 
     @GetMapping("/categories/{categoryId}/products")
-    public ResponseEntity<List<Product>> getProducts(@PathVariable long categoryId) {
-        List<Product> categories = productService.getProductsForCategory(categoryId);
+    public ResponseEntity<List<ProductReadDto>> getProducts(@PathVariable long categoryId) {
+        List<ProductReadDto> categories = productService.getProductsForCategory(categoryId);
         return ResponseEntity.ok(categories);
     }
 
     @PostMapping("/categories/{categoryId}/products")
-    public ResponseEntity<Object> addProduct(@PathVariable long categoryId, @RequestBody ProductDto productDto) {
-        Product product = productService.addProduct(categoryId, productDto);
+    public ResponseEntity<Object> addProduct(@PathVariable long categoryId, @RequestBody ProductCreateUpdateDto productCreateUpdateDto) {
+        ProductReadDto product = productService.addProduct(categoryId, productCreateUpdateDto);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(product.getId()).toUri();
         return ResponseEntity.created(location).build();
     }
 
     @GetMapping("/products/{productId}")
-    public ResponseEntity<Product> getProduct(@PathVariable long productId) {
-        Product product = productService.getProduct(productId);
+    public ResponseEntity<ProductReadDto> getProduct(@PathVariable long productId) {
+        ProductReadDto product = productService.getProduct(productId);
         return ResponseEntity.ok(product);
     }
 
     @PutMapping("/products/{productId}")
-    public ResponseEntity<Object> updateProduct(@PathVariable long productId, @RequestBody ProductDto productDto) {
-        productService.updateProduct(productId, productDto);
+    public ResponseEntity<Object> updateProduct(@PathVariable long productId, @RequestBody ProductCreateUpdateDto productCreateUpdateDto) {
+        productService.updateProduct(productId, productCreateUpdateDto);
         return ResponseEntity.noContent().build();
     }
 

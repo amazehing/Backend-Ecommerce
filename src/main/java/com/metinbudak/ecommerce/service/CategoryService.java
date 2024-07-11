@@ -1,6 +1,7 @@
 package com.metinbudak.ecommerce.service;
 
-import com.metinbudak.ecommerce.dto.CategoryDto;
+import com.metinbudak.ecommerce.dto.CategoryCreateUpdateDto;
+import com.metinbudak.ecommerce.dto.CategoryReadDto;
 import com.metinbudak.ecommerce.exception.RecordNotFoundException;
 import com.metinbudak.ecommerce.repository.CategoryRepository;
 import com.metinbudak.ecommerce.repository.domain.Category;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -20,27 +20,31 @@ public class CategoryService {
     }
 
     @Transactional
-    public Category createCategory(String name) {
+    public CategoryReadDto createCategory(String name) {
         Category category = new Category(name);
-        return categoryRepository.save(category);
+        category = categoryRepository.save(category);
+        return new CategoryReadDto(category.getId(), category.getName());
     }
 
-    public List<Category> getCategories() {
-        return categoryRepository.findAll();
+    public List<CategoryReadDto> getCategories() {
+        List<Category> categories = categoryRepository.findAll();
+        return categories.stream()
+                .map(category -> new CategoryReadDto(category.getId(), category.getName()))
+                .toList();
     }
 
-    public Category getCategory(long id) {
+    public CategoryReadDto getCategory(long id) {
         return categoryRepository.findById(id)
+                .map(category -> new CategoryReadDto(category.getId(), category.getName()))
                 .orElseThrow(() -> new RecordNotFoundException("Category not found with id: " + id));
     }
 
     @Transactional
-    public Category updateCategory(long id, CategoryDto categoryDto) {
+    public void updateCategory(long id, CategoryCreateUpdateDto categoryCreateUpdateDto) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("Category not found with id: " + id));
-
-        category.setName(categoryDto.getName());
-        return categoryRepository.save(category);
+        category.setName(categoryCreateUpdateDto.getName());
+        categoryRepository.save(category);
     }
 
     @Transactional
@@ -55,4 +59,5 @@ public class CategoryService {
     public boolean categoryExistsById(long id) {
         return categoryRepository.existsById(id);
     }
+
 }

@@ -1,6 +1,7 @@
 package com.metinbudak.ecommerce.controller;
 
-import com.metinbudak.ecommerce.repository.domain.Category;
+import com.metinbudak.ecommerce.dto.CategoryCreateUpdateDto;
+import com.metinbudak.ecommerce.dto.CategoryReadDto;
 import com.metinbudak.ecommerce.service.CategoryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,8 +32,7 @@ class CategoryControllerTest {
 
     @Test
     void addCategory() throws Exception {
-        Category categoryMens = new Category("men");
-        categoryMens.setId(1L);
+        CategoryReadDto categoryMens = new CategoryReadDto(1L, "men");
 
         when(categoryService.createCategory("men")).thenReturn(categoryMens); // Corrected method name
 
@@ -45,11 +45,9 @@ class CategoryControllerTest {
 
     @Test
     void getCategories() throws Exception {
-        Category categoryMen = new Category("men");
-        categoryMen.setId(1L);
-        Category categoryWomen = new Category("women");
-        categoryWomen.setId(2L);
-        List<Category> categories = List.of(categoryMen, categoryWomen);
+        CategoryReadDto categoryMen = new CategoryReadDto(1L, "men");
+        CategoryReadDto categoryWomen = new CategoryReadDto(2L, "women");
+        List<CategoryReadDto> categories = List.of(categoryMen, categoryWomen);
 
         when(categoryService.getCategories()).thenReturn(categories);
 
@@ -75,8 +73,7 @@ class CategoryControllerTest {
     @Test
     void getCategory() throws Exception {
         long categoryId = 1L;
-        Category categoryMen = new Category("men");
-        categoryMen.setId(categoryId);
+        CategoryReadDto categoryMen = new CategoryReadDto(categoryId, "men");
 
         when(categoryService.getCategory(categoryId)).thenReturn(categoryMen);
 
@@ -84,5 +81,18 @@ class CategoryControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(categoryMen.getName()))
                 .andExpect(jsonPath("$.id").value(categoryMen.getId()));
+    }
+
+    @Test
+    void updateCategory() throws Exception {
+        long categoryId = 1L;
+        CategoryCreateUpdateDto categoryKids = new CategoryCreateUpdateDto("kids");
+
+        doNothing().when(categoryService).updateCategory(categoryId, categoryKids);
+
+        mockMvc.perform(put("/categories/{id}", categoryId)
+                        .content("{\"name\": \"kids\"}")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
     }
 }
