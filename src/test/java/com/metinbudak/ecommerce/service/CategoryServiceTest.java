@@ -1,5 +1,6 @@
 package com.metinbudak.ecommerce.service;
 
+import com.metinbudak.ecommerce.dto.CategoryReadDto;
 import com.metinbudak.ecommerce.repository.CategoryRepository;
 import com.metinbudak.ecommerce.repository.domain.Category;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ class CategoryServiceTest {
 
     @Test
     void createCategory() {
-        Category category = categoryService.createCategory("men");
+        CategoryReadDto category = categoryService.createCategory("men");
 
         assertNotNull(category.getId());
         assertEquals("men", category.getName());
@@ -35,14 +36,14 @@ class CategoryServiceTest {
         categoryService.createCategory("women");
         categoryService.createCategory("kids");
 
-        List<Category> categories = categoryService.getCategories();
+        List<CategoryReadDto> categories = categoryService.getCategories();
 
         assertEquals(3, categories.size());
     }
 
     @Test
     void deleteCategory() {
-        Category category = categoryService.createCategory("men");
+        CategoryReadDto category = categoryService.createCategory("men");
         categoryService.createCategory("women");
 
         assertEquals(2, categoryRepository.count());

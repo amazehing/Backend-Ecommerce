@@ -1,6 +1,7 @@
 package com.metinbudak.ecommerce.service;
 
-import com.metinbudak.ecommerce.dto.ProductDto;
+import com.metinbudak.ecommerce.dto.ProductCreateUpdateDto;
+import com.metinbudak.ecommerce.dto.ProductReadDto;
 import com.metinbudak.ecommerce.repository.CategoryRepository;
 import com.metinbudak.ecommerce.repository.ImageRepository;
 import com.metinbudak.ecommerce.repository.ProductRepository;
@@ -35,7 +36,7 @@ class ProductServiceTest {
         Product tshirtBlue = saveProductInDb("t-shirt blue");
         Product tshirtGreen = saveProductInDb("t-shirt green");
 
-        List<Product> allProducts = productService.getAllProducts();
+        List<ProductReadDto> allProducts = productService.getAllProducts();
 
         assertEquals(2, allProducts.size());
         assertTrue(allProducts.contains(tshirtBlue));
@@ -47,7 +48,7 @@ class ProductServiceTest {
         Product tshirtBlue = saveProductInDb("t-shirt blue");
         Product tshirtGreen = saveProductInDb("t-shirt green");
 
-        List<Product> productsForCategory = productService.getProductsForCategory(tshirtBlue.getCategory().getId());
+        List<ProductReadDto> productsForCategory = productService.getProductsForCategory(tshirtBlue.getCategory().getId());
 
         assertEquals(1, productsForCategory.size());
         assertTrue(productsForCategory.contains(tshirtBlue));
@@ -62,26 +63,26 @@ class ProductServiceTest {
         Image image = new Image("/fake/location/image.png");
         image = imageRepository.save(image);
 
-        ProductDto productDto = new ProductDto();
-        productDto.setName("tshirt blue");
-        productDto.setImageIds(Set.of(image.getId()));
-        productDto.setNew_price(20.00);
-        productDto.setOld_price(30.00);
+        ProductCreateUpdateDto productCreateUpdateDto = new ProductCreateUpdateDto();
+        productCreateUpdateDto.setName("tshirt blue");
+        productCreateUpdateDto.setImageIds(Set.of(image.getId()));
+        productCreateUpdateDto.setNew_price(20.00);
+        productCreateUpdateDto.setOld_price(30.00);
 
-        Product product = productService.addProduct(category.getId(), productDto);
+        ProductReadDto product = productService.addProduct(category.getId(), productCreateUpdateDto);
 
         assertNotNull(product.getId());
-        assertEquals(productDto.getName(), product.getName());
-        assertEquals(productDto.getImageIds().size(), product.getImages().size());
-        assertEquals(productDto.getNew_price(), product.getNew_price());
-        assertEquals(productDto.getOld_price(), product.getOld_price());
+        assertEquals(productCreateUpdateDto.getName(), product.getName());
+        assertEquals(productCreateUpdateDto.getImageIds().size(), product.getImages().size());
+        assertEquals(productCreateUpdateDto.getNew_price(), product.getNew_price());
+        assertEquals(productCreateUpdateDto.getOld_price(), product.getOld_price());
     }
 
     @Test
     void getProduct() {
         Product tshirtBlue = saveProductInDb("t-shirt blue");
 
-        Product tshirtBlueDb = productService.getProduct(tshirtBlue.getId());
+        ProductReadDto tshirtBlueDb = productService.getProduct(tshirtBlue.getId());
 
         assertEquals(tshirtBlue, tshirtBlueDb);
     }

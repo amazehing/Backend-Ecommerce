@@ -1,7 +1,9 @@
 package com.metinbudak.ecommerce.controller;
 
-import com.metinbudak.ecommerce.controller.ProductController;
-import com.metinbudak.ecommerce.dto.ProductDto;
+import com.metinbudak.ecommerce.dto.CategoryReadDto;
+import com.metinbudak.ecommerce.dto.ImageReadDto;
+import com.metinbudak.ecommerce.dto.ProductCreateUpdateDto;
+import com.metinbudak.ecommerce.dto.ProductReadDto;
 import com.metinbudak.ecommerce.repository.domain.Category;
 import com.metinbudak.ecommerce.repository.domain.Image;
 import com.metinbudak.ecommerce.repository.domain.Product;
@@ -36,9 +38,9 @@ class ProductControllerTest {
 
     @Test
     void getAllProducts() throws Exception {
-        Product shirtYellow = createProductMock("t-shirt yellow");
-        Product shirtBlue = createProductMock("t-shirt blue");
-        List<Product> products = List.of(shirtYellow, shirtBlue);
+        ProductReadDto shirtYellow = createProductMock("t-shirt yellow");
+        ProductReadDto shirtBlue = createProductMock("t-shirt blue");
+        List<ProductReadDto> products = List.of(shirtYellow, shirtBlue);
 
         when(productService.getAllProducts()).thenReturn(products);
 
@@ -57,9 +59,9 @@ class ProductControllerTest {
     @Test
     void getProductsForCategory() throws Exception {
         long categoryId = 1L;
-        Product shirtYellow = createProductMock("t-shirt yellow");
-        Product shirtBlue = createProductMock("t-shirt blue");
-        List<Product> products = List.of(shirtYellow, shirtBlue);
+        ProductReadDto shirtYellow = createProductMock("t-shirt yellow");
+        ProductReadDto shirtBlue = createProductMock("t-shirt blue");
+        List<ProductReadDto> products = List.of(shirtYellow, shirtBlue);
 
         when(productService.getProductsForCategory(categoryId)).thenReturn(products);
 
@@ -78,9 +80,9 @@ class ProductControllerTest {
     @Test
     void addProduct() throws Exception {
         long categoryId = 1L;
-        Product shirtYellow = createProductMock("t-shirt yellow");
+        ProductReadDto shirtYellow = createProductMock("t-shirt yellow");
 
-        when(productService.addProduct(eq(categoryId), any(ProductDto.class))).thenReturn(shirtYellow);
+        when(productService.addProduct(eq(categoryId), any(ProductCreateUpdateDto.class))).thenReturn(shirtYellow);
 
         mockMvc.perform(post("/categories/{categoryId}/products", categoryId)
                         .content("""
@@ -101,7 +103,7 @@ class ProductControllerTest {
     @Test
     void getProduct() throws Exception {
         long productId = 1L;
-        Product shirtYellow = createProductMock("t-shirt yellow");
+        ProductReadDto shirtYellow = createProductMock("t-shirt yellow");
 
         when(productService.getProduct(productId)).thenReturn(shirtYellow);
 
@@ -116,7 +118,7 @@ class ProductControllerTest {
     @Test
     void updateProduct() throws Exception {
         long productId = 1L;
-        doNothing().when(productService).updateProduct(eq(productId), any(ProductDto.class));
+        doNothing().when(productService).updateProduct(eq(productId), any(ProductCreateUpdateDto.class));
 
         mockMvc.perform(put("/products/{productId}", productId)
                         .content("""
@@ -145,13 +147,17 @@ class ProductControllerTest {
                 .andExpect(content().string(""));
     }
 
-    public Product createProductMock(String productName){
-        Category category = new Category("random-category");
-        category.setId(1L);
-        Image image = new Image("/fake/location/image.png");
-        Product product = new Product(category, productName, 20.00, 30.00, Set.of(image));
-        product.setId(10L);
-        return product;
+    public ProductReadDto createProductMock(String productName){
+        CategoryReadDto category = new CategoryReadDto(1L, "random-category");
+        ImageReadDto image = new ImageReadDto(5L, "/fake/location/image.png");
+        return ProductReadDto.builder()
+                .id(10L)
+                .name(productName)
+                .old_price(20.00)
+                .new_price(30.00)
+                .category(category)
+                .images(Set.of(image))
+                .build();
     }
 
 }

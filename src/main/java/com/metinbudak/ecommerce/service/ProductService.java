@@ -1,6 +1,9 @@
 package com.metinbudak.ecommerce.service;
 
-import com.metinbudak.ecommerce.dto.ProductDto;
+import com.metinbudak.ecommerce.dto.CategoryReadDto;
+import com.metinbudak.ecommerce.dto.ImageReadDto;
+import com.metinbudak.ecommerce.dto.ProductCreateUpdateDto;
+import com.metinbudak.ecommerce.dto.ProductReadDto;
 import com.metinbudak.ecommerce.exception.ImageNotFoundException;
 import com.metinbudak.ecommerce.exception.RecordNotFoundException;
 import com.metinbudak.ecommerce.repository.CategoryRepository;
@@ -15,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -29,47 +33,69 @@ public class ProductService {
         this.imageRepository = imageRepository;
     }
 
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public List<ProductReadDto> getAllProducts() {
+        List<Product> products = productRepository.findAll();
+        return products.stream()
+                .map(it -> ProductReadDto.builder().build()).toList();
     }
 
-    public List<Product> getProductsForCategory(long categoryId) {
+    public List<ProductReadDto> getProductsForCategory(long categoryId) {
         if (!categoryRepository.existsById(categoryId)) {
             throw new RecordNotFoundException("Category cannot be found");
         }
-        return productRepository.findAllByCategoryId(categoryId);
+        List<Product> products = productRepository.findAllByCategoryId(categoryId);
+        return products.stream().map(this::mapProduct).toList();
     }
 
     @Transactional
-    public Product addProduct(long categoryId, ProductDto productDto) {
+    public ProductReadDto addProduct(long categoryId, ProductCreateUpdateDto productCreateUpdateDto) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new RecordNotFoundException("Category cannot be found"));
 
         Set<Image> images = new HashSet<>();
-        for (Long imageId : productDto.getImageIds()) {
+        for (Long imageId : productCreateUpdateDto.getImageIds()) {
             Image image = imageRepository.findById(imageId).orElseThrow(() -> new ImageNotFoundException("Image with id %s cannot be found".formatted(imageId)));
             images.add(image);
         }
 
         Product product = new Product(
                 category,
-                productDto.getName(),
-                productDto.getNew_price(),
-                productDto.getOld_price(),
+                productCreateUpdateDto.getName(),
+                productCreateUpdateDto.getNew_price(),
+                productCreateUpdateDto.getOld_price(),
                 images
         );
 
-        return productRepository.save(product);
+        product = productRepository.save(product);
+        return this.mapProduct(product);
     }
 
-    public Product getProduct(long productId) {
-        return productRepository.findById(productId).orElseThrow(() -> new RecordNotFoundException("Product cannot be found"));
+    public ProductReadDto getProduct(long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RecordNotFoundException("Product cannot be found"));
+        return this.mapProduct(product);
     }
 
-    public void updateProduct(long productId, ProductDto productDto) {
-        Product product = getProduct(productId);
-        product.setName(productDto.getName());
-        product.setNew_price(productDto.getNew_price());
-        product.setOld_price(productDto.getOld_price());
+    private ProductReadDto mapProduct(Product product) {
+        CategoryReadDto category = new CategoryReadDto(product.getCategory().getId(), product.getCategory().getName());
+        Set<ImageReadDto> images = product.getImages().stream()
+                .map(image -> new ImageReadDto(image.getId(), image.getLocation()))
+                .collect(Collectors.toSet());
+        return ProductReadDto.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .old_price(product.getOld_price())
+                .new_price(product.getNew_price())
+                .category(category)
+                .images(images)
+                .build();
+    }
+
+    public void updateProduct(long productId, ProductCreateUpdateDto productCreateUpdateDto) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RecordNotFoundException("Product cannot be found"));
+        product.setName(productCreateUpdateDto.getName());
+        product.setNew_price(productCreateUpdateDto.getNew_price());
+        product.setOld_price(productCreateUpdateDto.getOld_price());
         productRepository.save(product);
     }
 
