@@ -1,6 +1,7 @@
 package com.metinbudak.ecommerce.controller;
 
 import com.metinbudak.ecommerce.service.ImageService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -18,15 +19,12 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
 
+@RequiredArgsConstructor
 @RestController
 @Validated
 public class ImageController {
 
-    private ImageService imageService;
-
-    public ImageController(ImageService imageService) {
-        this.imageService = imageService;
-    }
+    private final ImageService imageService;
 
     @PostMapping("/images")
     public ResponseEntity<Long> saveImage(@RequestParam("file") MultipartFile file) throws IOException {
