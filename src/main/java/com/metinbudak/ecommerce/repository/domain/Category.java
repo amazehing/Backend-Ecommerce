@@ -26,8 +26,6 @@ public class Category {
     private String name;
 
     @OneToMany(mappedBy = "category")
-    @JsonBackReference
-    @JsonIgnore
     private List<Product> products = new ArrayList<>();
 
     public Category() {

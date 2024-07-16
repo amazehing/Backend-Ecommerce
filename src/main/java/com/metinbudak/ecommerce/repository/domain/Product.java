@@ -41,10 +41,20 @@ public class Product {
 
     public Product(Category category, String name, double new_price, double old_price, Set<Image> images) {
         this.category = category;
-        this.category.addProduct(this);
+//        this.category.addProduct(this);
         this.name = name;
         this.new_price = new_price;
         this.old_price = old_price;
         this.images = images;
     }
+
+    public Product(Category category, String name, double new_price, double old_price, Image image) {
+        this.category = category;
+//        this.category.addProduct(this);
+        this.name = name;
+        this.new_price = new_price;
+        this.old_price = old_price;
+        this.images = Set.of(image);
+    }
+
 }

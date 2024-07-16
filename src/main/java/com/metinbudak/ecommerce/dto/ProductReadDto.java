@@ -1,7 +1,5 @@
 package com.metinbudak.ecommerce.dto;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,6 +22,5 @@ public class ProductReadDto {
     private double new_price;
     private double old_price;
     private Set<ImageReadDto> images = new HashSet<>();
-
 
 }
