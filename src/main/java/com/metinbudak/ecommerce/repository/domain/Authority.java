@@ -4,32 +4,41 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
 
 import java.io.Serializable;
 
+@Getter
 @Entity
 @Table(name = "authorities")
 public class Authority implements Serializable {
+
+    public static final String ROLE_USER = "ROLE_USER";
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
+
     @Id
     @Column(nullable = false)
     private String username;
+
     @Id
     @Column(nullable = false)
     private String authority;
 
-    public String getUsername() {
-        return username;
+    protected Authority() {
+        // for JPA
     }
 
-    public void setUsername(String username) {
+    protected Authority(String username, String authority) {
         this.username = username;
-    }
-
-    public String getAuthority() {
-        return authority;
-    }
-
-    public void setAuthority(String authority) {
         this.authority = authority;
     }
+
+    public static Authority userAuthority(String username) {
+        return new Authority(username, Authority.ROLE_USER);
+    }
+
+    public static Authority adminAuthority(String username) {
+        return new Authority(username, Authority.ROLE_ADMIN);
+    }
+
 }
