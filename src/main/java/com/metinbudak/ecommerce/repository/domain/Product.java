@@ -36,25 +36,28 @@ public class Product {
     @JoinColumn(name = "product_id")
     private Set<Image> images = new LinkedHashSet<>();
 
+    @OneToMany(mappedBy = "product", orphanRemoval = true)
+    private Set<Review> reviews = new LinkedHashSet<>();
+
     public Product() {
     }
 
     public Product(Category category, String name, double new_price, double old_price, Set<Image> images) {
         this.category = category;
-//        this.category.addProduct(this);
         this.name = name;
         this.new_price = new_price;
         this.old_price = old_price;
         this.images = images;
+        this.reviews = null;
     }
 
     public Product(Category category, String name, double new_price, double old_price, Image image) {
         this.category = category;
-//        this.category.addProduct(this);
         this.name = name;
         this.new_price = new_price;
         this.old_price = old_price;
         this.images = Set.of(image);
+        this.reviews = null;
     }
 
 }
