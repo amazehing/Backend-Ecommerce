@@ -1,10 +1,12 @@
 package com.metinbudak.ecommerce.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+@Slf4j
 @ControllerAdvice
 public class ExceptionController {
 
@@ -16,6 +18,12 @@ public class ExceptionController {
     @ExceptionHandler(ImageNotFoundException.class)
     public ResponseEntity<Object> exception(ImageNotFoundException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(InternalServerException.class)
+    public ResponseEntity<Object> exception(InternalServerException exception) {
+        log.error(exception.getMessage());
+        return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

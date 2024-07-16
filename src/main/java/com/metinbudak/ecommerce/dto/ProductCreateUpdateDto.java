@@ -12,8 +12,6 @@ import java.util.Set;
 @Setter
 public class ProductCreateUpdateDto {
 
-    private String category;
-    private long categoryId;
     @NotBlank
     private String name;
     @Min(0)

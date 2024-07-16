@@ -12,6 +12,7 @@ import com.metinbudak.ecommerce.repository.ProductRepository;
 import com.metinbudak.ecommerce.repository.domain.Category;
 import com.metinbudak.ecommerce.repository.domain.Image;
 import com.metinbudak.ecommerce.repository.domain.Product;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,22 +22,16 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
 
     private CategoryRepository categoryRepository;
     private ProductRepository productRepository;
     private ImageRepository imageRepository;
 
-    public ProductService(CategoryRepository categoryRepository, ProductRepository productRepository, ImageRepository imageRepository) {
-        this.categoryRepository = categoryRepository;
-        this.productRepository = productRepository;
-        this.imageRepository = imageRepository;
-    }
-
     public List<ProductReadDto> getAllProducts() {
         List<Product> products = productRepository.findAll();
-        return products.stream()
-                .map(it -> ProductReadDto.builder().build()).toList();
+        return products.stream().map(this::mapProduct).toList();
     }
 
     public List<ProductReadDto> getProductsForCategory(long categoryId) {

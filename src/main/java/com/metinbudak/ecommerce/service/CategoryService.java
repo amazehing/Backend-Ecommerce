@@ -5,19 +5,17 @@ import com.metinbudak.ecommerce.dto.CategoryReadDto;
 import com.metinbudak.ecommerce.exception.RecordNotFoundException;
 import com.metinbudak.ecommerce.repository.CategoryRepository;
 import com.metinbudak.ecommerce.repository.domain.Category;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
-
-    public CategoryService(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-    }
 
     @Transactional
     public CategoryReadDto createCategory(String name) {

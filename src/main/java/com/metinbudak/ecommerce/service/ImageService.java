@@ -1,6 +1,7 @@
 package com.metinbudak.ecommerce.service;
 
 import com.metinbudak.ecommerce.exception.ImageNotFoundException;
+import com.metinbudak.ecommerce.exception.InternalServerException;
 import com.metinbudak.ecommerce.repository.ImageRepository;
 import com.metinbudak.ecommerce.repository.domain.Image;
 import org.springframework.core.io.FileSystemResource;
@@ -33,17 +34,17 @@ public class ImageService {
 
     public Resource loadImage(long imageId) {
         try {
-            Image image = imageRepository.findById(imageId).orElseThrow(() -> new ImageNotFoundException());
+            Image image = imageRepository.findById(imageId).orElseThrow(ImageNotFoundException::new);
 
-            Path targetLocation = rootLocation.resolve(image.getLocation());
+            Path targetLocation = Path.of(rootLocation.toString(), image.getLocation());
 
             if (Files.exists(targetLocation) && Files.isReadable(targetLocation)) {
                 return new FileSystemResource(targetLocation);
             } else {
-                throw new ImageNotFoundException();
+                throw new InternalServerException("Image not found in %s".formatted(targetLocation));
             }
         } catch (Exception e) {
-            throw new ImageNotFoundException();
+            throw new InternalServerException(e);
         }
     }
 }
