@@ -4,6 +4,7 @@ import com.metinbudak.ecommerce.dto.ProductCreateUpdateDto;
 import com.metinbudak.ecommerce.dto.ProductReadDto;
 import com.metinbudak.ecommerce.repository.domain.Product;
 import com.metinbudak.ecommerce.service.ProductService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,15 +19,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @Validated
 public class ProductController {
 
-    private ProductService productService;
-
-    public ProductController(ProductService productService) {
-        this.productService = productService;
-    }
+    private final ProductService productService;
 
     @GetMapping("/products")
     public ResponseEntity<List<ProductReadDto>> getAllProducts() {

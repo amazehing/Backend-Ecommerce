@@ -3,6 +3,7 @@ package com.metinbudak.ecommerce.controller;
 import com.metinbudak.ecommerce.dto.CategoryCreateUpdateDto;
 import com.metinbudak.ecommerce.dto.CategoryReadDto;
 import com.metinbudak.ecommerce.service.CategoryService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,15 +18,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @Validated
 public class CategoryController {
 
-    private CategoryService categoryService;
-
-    public CategoryController(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
+    private final CategoryService categoryService;
 
     @PostMapping("/categories")
     public ResponseEntity<Object> addCategory(@RequestBody CategoryCreateUpdateDto categoryCreateUpdateDto) {
