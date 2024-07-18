@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "categorie aanmaken",
+			"name": "gebruiker aanmaken",
 			"request": {
 				"auth": {
 					"type": "basic",
@@ -28,7 +28,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "dames",
+					"raw": "{\n    \"username\" : \"testgebruiker\",\n    \"password\" : \"testgebruiker\",\n    \"firstname\" : \"metins\",\n    \"lastname\" : \"budak\",\n    \"email\" : \"metin@budak\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -36,12 +36,170 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/categories",
-					"protocol": "http",
+					"raw": "https://localhost:8443/users",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8443",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "token ophalen",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "johndoe!password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "johndoe",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"john\",\n    \"password\" : \"helloworld\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:8443/users/me/token",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "8443",
+					"path": [
+						"users",
+						"me",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "gebruiker ophalen",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNzIxMTU2NDgzLCJleHAiOjE3MjIwMjA0ODN9.eghsuZ1hm-4pasWps6g9ERyMebOFyVo9TJQbyQh0FJ0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"john\",\n    \"password\" : \"helloworld\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:8443/users/me",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "8443",
+					"path": [
+						"users",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "gebruiker verwijderen",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNzIxMTU2NDgzLCJleHAiOjE3MjIwMjA0ODN9.eghsuZ1hm-4pasWps6g9ERyMebOFyVo9TJQbyQh0FJ0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:8443/users/johndoe",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "8443",
+					"path": [
+						"users",
+						"johndoe"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "categorie aanmaken",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcyMTE1NjQ4MiwiZXhwIjoxNzIyMDIwNDgyfQ.XRg3kBYYrZFm_y8ayPQ9Ju1FdiL57gmQFIeLgQxcYAo",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\" : \"babies\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:8443/categories",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "8443",
 					"path": [
 						"categories"
 					]
@@ -52,15 +210,18 @@
 		{
 			"name": "categories tonen",
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/categories",
-					"protocol": "http",
+					"raw": "https://localhost:8443/categories",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8443",
 					"path": [
 						"categories"
 					]
@@ -83,15 +244,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/categories/1",
-					"protocol": "http",
+					"raw": "https://localhost:8443/categories/2",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8443",
 					"path": [
 						"categories",
-						"1"
+						"2"
 					]
 				}
 			},
@@ -100,6 +261,16 @@
 		{
 			"name": "product toevoegen aan categorie",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcyMTE1NjQ4MiwiZXhwIjoxNzIyMDIwNDgyfQ.XRg3kBYYrZFm_y8ayPQ9Ju1FdiL57gmQFIeLgQxcYAo",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -112,15 +283,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/categories/52/products",
-					"protocol": "http",
+					"raw": "https://localhost:8443/categories/4/products",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8443",
 					"path": [
 						"categories",
-						"52",
+						"4",
 						"products"
 					]
 				}
@@ -133,12 +304,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/categories/1/products",
-					"protocol": "http",
+					"raw": "https://localhost:8443/categories/1/products",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8443",
 					"path": [
 						"categories",
 						"1",
@@ -154,12 +325,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/products/1",
-					"protocol": "http",
+					"raw": "https://localhost:8443/products/1",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8443",
 					"path": [
 						"products",
 						"1"
@@ -171,6 +342,16 @@
 		{
 			"name": "product updaten",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcyMTE1NjQ4MiwiZXhwIjoxNzIyMDIwNDgyfQ.XRg3kBYYrZFm_y8ayPQ9Ju1FdiL57gmQFIeLgQxcYAo",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [],
 				"body": {
@@ -183,12 +364,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/products/1",
-					"protocol": "http",
+					"raw": "https://localhost:8443/products/1",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8443",
 					"path": [
 						"products",
 						"1"
@@ -203,12 +384,12 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/products/1",
-					"protocol": "http",
+					"raw": "https://localhost:8443/products/1",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8443",
 					"path": [
 						"products",
 						"1"
@@ -220,6 +401,16 @@
 		{
 			"name": "afbeelding opslaan",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcyMTE1NjQ4MiwiZXhwIjoxNzIyMDIwNDgyfQ.XRg3kBYYrZFm_y8ayPQ9Ju1FdiL57gmQFIeLgQxcYAo",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -228,17 +419,17 @@
 						{
 							"key": "file",
 							"type": "file",
-							"src": "/Users/MevlutOzdemir/Downloads/fles.jpeg"
+							"src": "/Users/MevlutOzdemir/Desktop/metin8-DONE.jpeg"
 						}
 					]
 				},
 				"url": {
-					"raw": "http://localhost:8080/images",
-					"protocol": "http",
+					"raw": "https://localhost:8443/images",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8443",
 					"path": [
 						"images"
 					],
@@ -283,25 +474,34 @@
 		{
 			"name": "review toevoegen aan product",
 			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
+				"auth": {
+					"type": "bearer",
+					"bearer": [
 						{
-							"key": "file",
-							"type": "file",
-							"src": "/Users/MevlutOzdemir/Downloads/fles.jpeg"
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNzIxMTU2ODk2LCJleHAiOjE3MjIwMjA4OTZ9.Luna1lewviuewG8uCn6gwDPqXni0EfYDJMTGPlzYc30",
+							"type": "string"
 						}
 					]
 				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\" : \"John doe\",\n    \"comment\" : \"Very nice\",\n    \"rating\": 5\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:8080/products/1/reviews",
-					"protocol": "http",
+					"raw": "https://localhost:8443/products/1/reviews",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8443",
 					"path": [
 						"products",
 						"1",
@@ -324,12 +524,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/reviews/1",
-					"protocol": "http",
+					"raw": "https://localhost:8443/reviews/1",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8443",
 					"path": [
 						"reviews",
 						"1"
@@ -351,12 +551,12 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/reviews/1",
-					"protocol": "http",
+					"raw": "https://localhost:8443/reviews/1",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8443",
 					"path": [
 						"reviews",
 						"1"
@@ -378,12 +578,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/products/1/reviews",
-					"protocol": "http",
+					"raw": "https://localhost:8443/products/1/reviews",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8443",
 					"path": [
 						"products",
 						"1",
@@ -406,12 +606,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/products/1/reviews/statistics",
-					"protocol": "http",
+					"raw": "https://localhost:8443/products/1/reviews/statistics",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8443",
 					"path": [
 						"products",
 						"1",

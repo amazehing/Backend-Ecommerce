@@ -35,6 +35,7 @@ public class MySecurityConfig {
 
                 // Alleen admins mogen categorieen/producten/images aanmaken en updaten
                 .requestMatchers(HttpMethod.POST, "/categories", "/categories/{id}/products").hasRole(ROLE_ADMIN)
+                .requestMatchers(HttpMethod.DELETE, "/categories/{id}").hasRole(ROLE_ADMIN)
                 .requestMatchers(HttpMethod.PUT, "/categories/{id}", "/products/{id}").hasRole(ROLE_ADMIN)
                 .requestMatchers(HttpMethod.POST, "/images").hasRole(ROLE_ADMIN)
 
