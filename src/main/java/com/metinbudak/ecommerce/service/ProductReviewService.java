@@ -39,7 +39,7 @@ public class ProductReviewService {
                 .orElseThrow(() -> new RecordNotFoundException("Review cannot be found"));
     }
 
-    private ReviewReadDto mapToDto(Review review) {
+    protected ReviewReadDto mapToDto(Review review) {
         return ReviewReadDto.builder()
                 .id(review.getId())
                 .name(review.getName())
@@ -58,8 +58,8 @@ public class ProductReviewService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RecordNotFoundException("Product cannot be found"));
         int totalReviews = reviewRepository.countByProductId(product.getId());
-        double sumRatings = reviewRepository.averageRatingByProductId(productId);
-        return new ReviewStatisticsDto(totalReviews, sumRatings);
+        double averageRating = reviewRepository.averageRatingByProductId(productId);
+        return new ReviewStatisticsDto(totalReviews, averageRating);
     }
 
 }
