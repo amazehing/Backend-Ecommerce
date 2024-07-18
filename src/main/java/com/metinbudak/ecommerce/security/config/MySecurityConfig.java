@@ -33,19 +33,16 @@ public class MySecurityConfig {
                 // Alleen admins mogen alle users ophalen
                 .requestMatchers(HttpMethod.GET, "/users").hasRole(ROLE_ADMIN)
 
-                // Alleen admins mogen categorieen/producten/images aanmaken/updaten
+                // Alleen admins mogen categorieen/producten/images aanmaken en updaten
                 .requestMatchers(HttpMethod.POST, "/categories", "/categories/{id}/products").hasRole(ROLE_ADMIN)
                 .requestMatchers(HttpMethod.PUT, "/categories/{id}", "/products/{id}").hasRole(ROLE_ADMIN)
                 .requestMatchers(HttpMethod.POST, "/images").hasRole(ROLE_ADMIN)
 
-                // Alleen geautoriseerde gebruikers kunnen data van zichzelf opvragen
-                .requestMatchers(HttpMethod.GET, "/users/me", "/users/me/**").authenticated()
-
-                // Alleen gebruikers mogen reviews plaatsen
-                .requestMatchers(HttpMethod.POST, "/products/{id}/reviews").hasRole(ROLE_USER)
-
                 // Alleen admins mogen data verwijderen
                 .requestMatchers(HttpMethod.DELETE, "/**").hasRole(ROLE_ADMIN)
+
+                // Alleen geautoriseerde gebruikers kunnen data van zichzelf opvragen
+                .requestMatchers(HttpMethod.GET, "/users/me", "/users/me/**").authenticated()
 
                 // Voor de overige API's is authenticatie niet vereist
                 .anyRequest().permitAll()
