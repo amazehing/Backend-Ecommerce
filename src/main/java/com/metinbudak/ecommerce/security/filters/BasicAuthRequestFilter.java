@@ -1,7 +1,5 @@
 package com.metinbudak.ecommerce.security.filters;
 
-import com.metinbudak.ecommerce.exception.AuthenticationException;
-import com.metinbudak.ecommerce.exception.InternalServerException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
