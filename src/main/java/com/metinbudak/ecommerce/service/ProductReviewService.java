@@ -34,9 +34,9 @@ public class ProductReviewService {
     }
 
     public ReviewReadDto getReview(long reviewId) {
-        Review review = reviewRepository.findById(reviewId)
+        return reviewRepository.findById(reviewId)
+                .map(this::mapToDto)
                 .orElseThrow(() -> new RecordNotFoundException("Review cannot be found"));
-        return mapToDto(review);
     }
 
     private ReviewReadDto mapToDto(Review review) {
