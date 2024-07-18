@@ -2,7 +2,6 @@ package com.metinbudak.ecommerce.controller;
 
 import com.metinbudak.ecommerce.dto.ProductCreateUpdateDto;
 import com.metinbudak.ecommerce.dto.ProductReadDto;
-import com.metinbudak.ecommerce.repository.domain.Product;
 import com.metinbudak.ecommerce.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

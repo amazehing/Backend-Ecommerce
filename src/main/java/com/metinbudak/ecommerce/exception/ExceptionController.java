@@ -1,5 +1,6 @@
 package com.metinbudak.ecommerce.exception;
 
+import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,23 @@ public class ExceptionController {
     public ResponseEntity<Object> exception(InternalServerException exception) {
         log.error(exception.getMessage());
         return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(SignatureException.class)
+    public ResponseEntity<Object> exception(SignatureException exception) {
+        log.error(exception.getMessage());
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<Object> exception(AuthenticationException exception) {
+        log.error(exception.getMessage());
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(UsernameAlreadyExistsException.class)
+    public ResponseEntity<Object> exception(UsernameAlreadyExistsException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
 }

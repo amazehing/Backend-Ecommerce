@@ -53,9 +53,4 @@ public class CategoryService {
         categoryRepository.deleteById(id);
     }
 
-    // Extra methode toevoegen voor het controleren van het bestaan van een categorie
-    public boolean categoryExistsById(long id) {
-        return categoryRepository.existsById(id);
-    }
-
 }

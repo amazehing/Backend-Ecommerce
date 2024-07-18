@@ -25,13 +25,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductService {
 
-    private CategoryRepository categoryRepository;
-    private ProductRepository productRepository;
-    private ImageRepository imageRepository;
+    private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
+    private final ImageRepository imageRepository;
 
     public List<ProductReadDto> getAllProducts() {
         List<Product> products = productRepository.findAll();
-        return products.stream().map(this::mapProduct).toList();
+        return products.stream().map(this::mapToDto).toList();
     }
 
     public List<ProductReadDto> getProductsForCategory(long categoryId) {
@@ -39,7 +39,7 @@ public class ProductService {
             throw new RecordNotFoundException("Category cannot be found");
         }
         List<Product> products = productRepository.findAllByCategoryId(categoryId);
-        return products.stream().map(this::mapProduct).toList();
+        return products.stream().map(this::mapToDto).toList();
     }
 
     @Transactional
@@ -61,16 +61,16 @@ public class ProductService {
         );
 
         product = productRepository.save(product);
-        return this.mapProduct(product);
+        return this.mapToDto(product);
     }
 
     public ProductReadDto getProduct(long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RecordNotFoundException("Product cannot be found"));
-        return this.mapProduct(product);
+        return this.mapToDto(product);
     }
 
-    private ProductReadDto mapProduct(Product product) {
+    private ProductReadDto mapToDto(Product product) {
         CategoryReadDto category = new CategoryReadDto(product.getCategory().getId(), product.getCategory().getName());
         Set<ImageReadDto> images = product.getImages().stream()
                 .map(image -> new ImageReadDto(image.getId(), image.getLocation()))
