@@ -1,7 +1,5 @@
 package com.metinbudak.ecommerce.repository.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,6 +27,11 @@ public class Category {
     private List<Product> products = new ArrayList<>();
 
     public Category() {
+    }
+
+    public Category(long id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public Category(String name) {

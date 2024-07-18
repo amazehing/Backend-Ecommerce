@@ -1,7 +1,6 @@
 package com.metinbudak.ecommerce.testdata;
 
 import com.metinbudak.ecommerce.repository.CategoryRepository;
-import com.metinbudak.ecommerce.repository.ImageRepository;
 import com.metinbudak.ecommerce.repository.ProductRepository;
 import com.metinbudak.ecommerce.repository.UserRepository;
 import com.metinbudak.ecommerce.repository.domain.Category;
